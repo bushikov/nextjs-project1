@@ -45,3 +45,23 @@ Migrate
   npx prisma migrate dev --preview-feature
   ```
 
+Install ts-node
+  ```
+  npm install --save-dev ts-node @types/node
+  ```
+
+Configure seed file
+  - edit `prisma/seed.ts`
+  - edit `package.json`
+    ```json
+    "scripts": {
+    ...
+    "ts-node": "ts-node --compiler-options '{\"module\":\"CommonJS\"}'",
+    ...
+    },
+    ```
+
+Seeding
+  ```
+  npx prisma db seed --preview-feature
+  ```

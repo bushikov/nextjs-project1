@@ -34,3 +34,5 @@ yarn-error.log*
 .vercel
 
 .env
+sqlite3.exe
+/prisma/dev.db*
