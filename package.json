@@ -9,7 +9,9 @@
     "seed": "prisma db seed --preview-feature",
     "start": "next start",
     "studio": "prisma studio",
-    "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\"}\""
+    "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\"}\"",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@prisma/client": "^2.22.1",
@@ -19,8 +21,14 @@
     "react-dom": "17.0.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-essentials": "^6.2.9",
+    "@storybook/addon-links": "^6.2.9",
+    "@storybook/react": "^6.2.9",
     "@types/node": "^15.3.0",
     "@types/react": "^17.0.5",
+    "babel-loader": "^8.2.2",
     "prettier": "2.3.0",
     "prisma": "^2.22.1",
     "ts-node": "^9.1.1",
