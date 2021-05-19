@@ -17,7 +17,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
       />
-      <span className="icon is-small is-left">
+      <span className="icon is-left">
         <Search style={{ height: "40%" }} />
       </span>
     </p>
