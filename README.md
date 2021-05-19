@@ -56,7 +56,7 @@ Configure seed file
     ```json
     "scripts": {
     ...
-    "ts-node": "ts-node --compiler-options '{\"module\":\"CommonJS\"}'",
+    "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\"}\"",
     ...
     },
     ```
@@ -64,4 +64,34 @@ Configure seed file
 Seeding
   ```
   npx prisma db seed --preview-feature
+  ```
+
+Install Bulma
+  ```
+  npm install bulma
+  ```
+
+Configure Bulma
+  ```
+  // pages/_app.tsx
+  import "bulma/css/bulma.min.css";
+  ```
+
+Install Storybook
+  ```
+  npx -p @storybook/cli sb init
+  ```
+
+Install balel-plugin-inline-react-svg for using svg
+  ```
+  npm install --save-dev babel-plugin-inline-react-svg
+  ```
+
+Configure .babelrc
+  ```
+  // .babelrc
+  {
+    "presets": ["next/babel"],
+    "plugins": ["inline-react-svg"]
+  }
   ```
