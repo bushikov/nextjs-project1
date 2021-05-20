@@ -1,25 +1,38 @@
+import { useState } from "react";
 import Search from "../public/svg/fontawesome/solid/search.svg";
 
 export interface SearchBoxProps {
   placeholder?: string;
-  onChange: (string) => void;
+  onClick: (string) => void;
 }
 
 export const SearchBox: React.FC<SearchBoxProps> = ({
   placeholder,
-  onChange,
-}) => (
-  <div className="field">
-    <p className="control has-icons-left">
-      <input
-        className="input"
-        type="text"
-        placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
-      />
-      <span className="icon is-left">
-        <Search style={{ height: "40%" }} />
-      </span>
-    </p>
-  </div>
-);
+  onClick,
+}) => {
+  const [text, setText] = useState("");
+
+  return (
+    <div className="field is-grouped">
+      <p className="control has-icons-left">
+        <input
+          className="input"
+          type="text"
+          placeholder={placeholder}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <span className="icon is-left">
+          <Search style={{ height: "40%" }} />
+        </span>
+      </p>
+      <button
+        className="button is-primary"
+        onClick={() => {
+          onClick(text);
+        }}
+      >
+        Search
+      </button>
+    </div>
+  );
+};

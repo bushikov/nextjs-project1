@@ -10,7 +10,7 @@ const Templeate: Story<SearchBoxProps> = (args) => <SearchBox {...args} />;
 export const SearchBoxDefault = Templeate.bind({});
 SearchBoxDefault.args = {
   placeholder: "John Smith",
-  onChange: (value) => {
+  onClick: (value) => {
     console.log(value);
   },
 };
