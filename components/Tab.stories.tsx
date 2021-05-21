@@ -2,7 +2,7 @@ import { Story, Meta } from "@storybook/react";
 import { Tab, TabProps } from "./Tab";
 
 export default {
-  title: "Tab",
+  title: "Component/Tab",
 } as Meta;
 
 const Template: Story<TabProps> = (args) => <Tab {...args} />;

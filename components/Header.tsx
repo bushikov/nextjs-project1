@@ -9,11 +9,13 @@ export const Header: React.FC<HeaderProps> = ({ isSignedIn }) => (
     </div>
     <div className="navbar-menu">
       <div className="navbar-end">
-        {isSignedIn ? (
-          <button className="button is-primary">Sign Out</button>
-        ) : (
-          <button className="button is-primary">Sign In</button>
-        )}
+        <div className="navbar-item">
+          {isSignedIn ? (
+            <button className="button is-primary">Sign Out</button>
+          ) : (
+            <button className="button is-primary">Sign In</button>
+          )}
+        </div>
       </div>
     </div>
   </div>

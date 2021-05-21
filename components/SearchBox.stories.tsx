@@ -2,7 +2,7 @@ import { Story, Meta } from "@storybook/react";
 import { SearchBox, SearchBoxProps } from "./SearchBox";
 
 export default {
-  title: "SearchBox",
+  title: "Component/SearchBox",
 } as Meta;
 
 const Templeate: Story<SearchBoxProps> = (args) => <SearchBox {...args} />;

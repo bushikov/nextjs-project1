@@ -2,7 +2,7 @@ import { Story, Meta } from "@storybook/react";
 import { ArticleCard, ArticleCardProps } from "./ArticleCard";
 
 export default {
-  title: "ArticleCard",
+  title: "Component/ArticleCard",
 } as Meta;
 
 const Templeate: Story<ArticleCardProps> = (args) => <ArticleCard {...args} />;
