@@ -1,4 +1,14 @@
-const users = [
+import { PrismaClient } from "@prisma/client";
+
+export interface User {
+  id?: number;
+  name: string;
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export const users: User[] = [
   {
     name: "testuser",
     email: "testuser@example.com",
@@ -7,21 +17,19 @@ const users = [
   },
 ];
 
-export function getUsers(prisma) {
-  return users.map((user) => {
-    return new Promise((resolve) => {
-      resolve(
-        prisma.user.upsert({
-          where: { email: user.email },
-          update: {},
-          create: {
-            name: user.name,
-            email: user.email,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt,
-          },
-        })
-      );
+export const createUsers = async (prisma: PrismaClient) => {
+  const promises = users.map((user) => {
+    return prisma.user.upsert({
+      where: { email: user.email },
+      update: {},
+      create: {
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
     });
   });
-}
+
+  return Promise.all(promises);
+};

@@ -35,4 +35,5 @@ yarn-error.log*
 
 .env
 sqlite3.exe
-/prisma/dev.db*
+prisma/dev.db
+prisma/migrations

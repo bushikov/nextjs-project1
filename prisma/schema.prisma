@@ -47,6 +47,7 @@ model User {
   image         String?
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
+  Article       Article[]
 
   @@map(name: "users")
 }
@@ -60,4 +61,16 @@ model VerificationRequest {
   updatedAt   DateTime  @default(now()) @map(name: "updated_at")
 
   @@map(name: "verification_requests")
+}
+
+model Article {
+  id          Int       @default(autoincrement()) @id
+  title       String
+  body        String
+  createdAt   DateTime  @default(now()) @map(name: "created_at")
+  updatedAt   DateTime  @default(now()) @map(name: "updated_at")
+  User        User      @relation(fields: [userId], references: [id])
+  userId      Int
+
+  @@map(name: "articles")
 }

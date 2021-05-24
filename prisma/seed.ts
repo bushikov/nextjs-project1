@@ -1,17 +1,20 @@
 import { PrismaClient } from "@prisma/client";
 
-import { getUsers } from "./seeds/users";
+import { createUsers } from "./seeds/users";
+import { createArticlesWithUser } from "./seeds/articles";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  let promises = [];
-  promises = promises.concat(getUsers(prisma));
-
   try {
-    const data = await Promise.all(promises);
+    const users = await createUsers(prisma);
+
+    const user = users.find((u) => u.email === "testuser@example.com");
+    const articles = await createArticlesWithUser(prisma, user);
+
     console.log("** SUCCESS **");
-    console.log(data);
+    console.log(users);
+    console.log(articles);
   } catch (e) {
     console.log("** FAILURE **");
     console.error(e);
