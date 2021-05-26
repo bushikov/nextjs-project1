@@ -3,7 +3,7 @@ import Search from "../public/svg/fontawesome/solid/search.svg";
 
 export interface SearchBoxProps {
   placeholder?: string;
-  onClick: (string) => void;
+  onClick: (arg0: string) => void;
 }
 
 export const SearchBox: React.FC<SearchBoxProps> = ({

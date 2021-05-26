@@ -13,8 +13,8 @@ async function main() {
     const articles = await createArticlesWithUser(prisma, user);
 
     console.log("** SUCCESS **");
-    console.log(users);
-    console.log(articles);
+    console.log(`${users.length} users created`);
+    console.log(`${articles.length} articles created`);
   } catch (e) {
     console.log("** FAILURE **");
     console.error(e);
