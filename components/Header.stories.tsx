@@ -8,6 +8,3 @@ export default {
 const Templeate: Story<HeaderProps> = (args) => <Header {...args} />;
 
 export const HeaderDefault = Templeate.bind({});
-HeaderDefault.args = {
-  isSignedIn: true,
-};
