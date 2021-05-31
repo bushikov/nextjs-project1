@@ -5,12 +5,78 @@ import { Header } from "../components/Header";
 import { Tab } from "../components/Tab";
 import { SearchBox } from "../components/SearchBox";
 import { ArticleCard } from "../components/ArticleCard";
+import { AuthorCard } from "../components/AuthorCard";
 
-const getArticles = async ({ queryKey }) => {
+const fetchData = async ({ queryKey }) => {
   const [url, { page, keyword }] = queryKey;
   const params = { page, keyword };
   const response = await axios.get(url, { params });
   return response.data;
+};
+
+interface ArticlesProps {
+  keyword?: string;
+}
+
+const Articles: React.FC<ArticlesProps> = ({ keyword }) => {
+  const { data: articles, isFetching } = useQuery(
+    // TODO: Pagination
+    // ["/api/articles", { page, keyword }],
+    ["/api/articles", { keyword }],
+    fetchData
+  );
+
+  if (isFetching) {
+    return (
+      <div className="columns">
+        <p className="column">Loading...</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {articles.map((article) => (
+        <div className="column" key={article.id}>
+          <ArticleCard
+            title={article.title}
+            author={article.User.name}
+            content={article.body}
+            date={new Date(article.updatedAt)}
+          />
+        </div>
+      ))}
+    </>
+  );
+};
+
+interface AuthorsProps {
+  keyword?: string;
+}
+
+const Authors: React.FC<AuthorsProps> = ({ keyword }) => {
+  const { data: authors, isFetching } = useQuery(
+    ["/api/authors", { keyword }],
+    fetchData
+  );
+
+  if (isFetching) {
+    return (
+      <div className="columns">
+        <p className="column">Loading...</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {authors.map((author) => (
+        <div className="column" key={author.name}>
+          <AuthorCard name={author.name} />
+        </div>
+      ))}
+    </>
+  );
 };
 
 export default function Home() {
@@ -18,12 +84,6 @@ export default function Home() {
   // TODO: Pagination
   // const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState("");
-  const { data: articles, isFetching } = useQuery(
-    // TODO: Pagination
-    // ["/api/articles", { page, keyword }],
-    ["/api/articles", { keyword }],
-    getArticles
-  );
 
   return (
     <>
@@ -42,21 +102,10 @@ export default function Home() {
           }}
         />
         <div className="box">
-          {isFetching ? (
-            <div className="columns">
-              <p className="column">Loading...</p>
-            </div>
+          {tabIndex === 0 ? (
+            <Articles keyword={keyword} />
           ) : (
-            articles.map((article) => (
-              <div className="column" key={article.id}>
-                <ArticleCard
-                  title={article.title}
-                  author={article.User.name}
-                  content={article.body}
-                  date={new Date(article.updatedAt)}
-                />
-              </div>
-            ))
+            <Authors keyword={keyword} />
           )}
         </div>
       </div>
