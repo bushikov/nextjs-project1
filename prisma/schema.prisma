@@ -47,7 +47,10 @@ model User {
   image         String?
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
+
   Article       Article[]
+  Followers     User[]    @relation("FollowRelationship", references: [id])
+  Following     User[]    @relation("FollowRelationship", references: [id])
 
   @@map(name: "users")
 }

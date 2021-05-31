@@ -23,11 +23,8 @@ const articles = [
   },
 ];
 
-export const createArticlesWithUser = async (
-  prisma: PrismaClient,
-  user: User
-) => {
-  let promises = articles.map((a) => {
+export const createArticles = async (prisma: PrismaClient, user: User) => {
+  const promises = articles.map((a) => {
     return prisma.article.create({
       data: {
         title: a.title,
@@ -39,19 +36,25 @@ export const createArticlesWithUser = async (
     });
   });
 
-  promises = promises.concat(
-    ...[...Array(9)].map(() => {
-      return prisma.article.create({
-        data: {
-          title: faker.lorem.sentence(),
-          body: faker.lorem.paragraph(),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          userId: user.id,
-        },
-      });
-    })
-  );
+  return Promise.all(promises);
+};
+
+export const createRandomArticles = async (
+  prisma: PrismaClient,
+  user: User,
+  num: number
+) => {
+  const promises = [...Array(num)].map(() => {
+    return prisma.article.create({
+      data: {
+        title: faker.lorem.sentence(),
+        body: faker.lorem.paragraph(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        userId: user.id,
+      },
+    });
+  });
 
   return Promise.all(promises);
 };

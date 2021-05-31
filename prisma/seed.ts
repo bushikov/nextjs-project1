@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 import { createUsers } from "./seeds/users";
-import { createArticlesWithUser } from "./seeds/articles";
+import { createArticles, createRandomArticles } from "./seeds/articles";
 
 const prisma = new PrismaClient();
 
@@ -9,12 +9,20 @@ async function main() {
   try {
     const users = await createUsers(prisma);
 
-    const user = users.find((u) => u.email === "testuser@example.com");
-    const articles = await createArticlesWithUser(prisma, user);
+    let promises = [];
+    const johnsmith = users.find((u) => u.email === "johnsmith@example.com");
+    promises.push(createArticles(prisma, johnsmith));
+    const alicedouglas = users.find(
+      (u) => u.email === "alicedouglas@example.com"
+    );
+    promises.push(createRandomArticles(prisma, alicedouglas, 5));
+    const bobgerrard = users.find((u) => u.email === "bobgerrard@example.com");
+    promises.push(createRandomArticles(prisma, bobgerrard, 3));
+
+    await Promise.all(promises);
 
     console.log("** SUCCESS **");
     console.log(`${users.length} users created`);
-    console.log(`${articles.length} articles created`);
   } catch (e) {
     console.log("** FAILURE **");
     console.error(e);
