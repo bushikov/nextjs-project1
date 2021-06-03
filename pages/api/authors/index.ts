@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient, Prisma, User } from "@prisma/client";
+import { getSession } from "next-auth/client";
+import { parseQuery } from "../../../utils/query_parser";
 
 const prisma = new PrismaClient();
 
@@ -13,41 +15,50 @@ const baseParams: Prisma.UserFindManyArgs = {
   },
 };
 
-const getAuthors = async (page?: number, keyword?: string | string[]) => {
+const getAuthors = async (page?: number, keywords?: string[], user?: User) => {
   let params = { ...baseParams };
+
   if (page) {
     const skip = (page - 1) * 10;
     params = { ...params, take: 10, skip };
   }
-  if (!keyword || keyword !== "") {
-    if (keyword instanceof Array) {
-      const conditions = keyword.map((k) => {
-        return {
-          name: {
-            contains: k,
-          },
-        };
-      });
+
+  if (keywords) {
+    if (keywords.length >= 2) {
+      const conditions = keywords.map((k) => ({
+        name: { contains: k },
+      }));
       params = { ...params, where: { AND: conditions } };
     } else {
-      params = { ...params, where: { name: { contains: keyword } } };
+      if (keywords[0]) {
+        params = { ...params, where: { name: { contains: keywords[0] } } };
+      }
     }
+  }
+
+  if (user) {
+    params = {
+      ...params,
+      where: { ...params.where, Followers: { some: { email: user.email } } },
+    };
   }
 
   return prisma.user.findMany(params);
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const session = await getSession({ req });
   const method = req.method;
 
   if (method === "GET") {
-    const { page, keyword } = req.query;
-    let pageInt = 0;
-    if (!!page && !(page instanceof Array) && !isNaN(parseInt(page))) {
-      pageInt = parseInt(page);
+    const { page, keywords, onlyFollowing } = parseQuery(req.query);
+
+    let user;
+    if (session && onlyFollowing) {
+      user = session.user;
     }
 
-    const authors = await getAuthors(pageInt, keyword);
+    const authors = await getAuthors(page, keywords, user);
     res.status(200).json(authors);
   }
 };

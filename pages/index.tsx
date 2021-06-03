@@ -1,28 +1,31 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { useSession } from "next-auth/client";
 import { Header } from "../components/Header";
 import { Tab } from "../components/Tab";
 import { SearchBox } from "../components/SearchBox";
 import { ArticleCard } from "../components/ArticleCard";
 import { AuthorCard } from "../components/AuthorCard";
+import { CheckBox } from "../components/CheckBox";
 
 const fetchData = async ({ queryKey }) => {
-  const [url, { page, keyword }] = queryKey;
-  const params = { page, keyword };
+  const [url, { page, keyword, onlyFollowing }] = queryKey;
+  const params = { page, keyword, onlyFollowing };
   const response = await axios.get(url, { params });
   return response.data;
 };
 
 interface ArticlesProps {
   keyword?: string;
+  onlyFollowing?: boolean;
 }
 
-const Articles: React.FC<ArticlesProps> = ({ keyword }) => {
+const Articles: React.FC<ArticlesProps> = ({ keyword, onlyFollowing }) => {
   const { data: articles, isFetching } = useQuery(
     // TODO: Pagination
     // ["/api/articles", { page, keyword }],
-    ["/api/articles", { keyword }],
+    ["/api/articles", { keyword, onlyFollowing }],
     fetchData
   );
 
@@ -52,11 +55,12 @@ const Articles: React.FC<ArticlesProps> = ({ keyword }) => {
 
 interface AuthorsProps {
   keyword?: string;
+  onlyFollowing?: boolean;
 }
 
-const Authors: React.FC<AuthorsProps> = ({ keyword }) => {
+const Authors: React.FC<AuthorsProps> = ({ keyword, onlyFollowing }) => {
   const { data: authors, isFetching } = useQuery(
-    ["/api/authors", { keyword }],
+    ["/api/authors", { keyword, onlyFollowing }],
     fetchData
   );
 
@@ -80,10 +84,12 @@ const Authors: React.FC<AuthorsProps> = ({ keyword }) => {
 };
 
 export default function Home() {
+  const [session] = useSession();
   const [tabIndex, setTabIndex] = useState(0);
   // TODO: Pagination
   // const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState("");
+  const [onlyFollowing, setOnlyFollowing] = useState(false);
 
   return (
     <>
@@ -101,11 +107,21 @@ export default function Home() {
             setKeyword(text);
           }}
         />
+        {session ? (
+          <div className="block">
+            <CheckBox
+              label="Only following"
+              onChange={(on) => {
+                setOnlyFollowing(on);
+              }}
+            />
+          </div>
+        ) : null}
         <div className="box">
           {tabIndex === 0 ? (
-            <Articles keyword={keyword} />
+            <Articles keyword={keyword} onlyFollowing={onlyFollowing} />
           ) : (
-            <Authors keyword={keyword} />
+            <Authors keyword={keyword} onlyFollowing={onlyFollowing} />
           )}
         </div>
       </div>

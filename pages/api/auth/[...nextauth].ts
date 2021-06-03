@@ -16,7 +16,7 @@ const options = {
       credentials: {},
       authorize: async () => {
         const user = await prisma.user.findUnique({
-          where: { email: "testuser@example.com" },
+          where: { email: "johnsmith@example.com" },
         });
 
         return user;
