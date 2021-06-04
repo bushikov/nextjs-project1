@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-const styles = {
+const styles: { [key: string]: React.CSSProperties } = {
   label: { paddingRight: "1rem" },
   input: { marginRight: "0.25rem" },
 };
