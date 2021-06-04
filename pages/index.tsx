@@ -46,6 +46,7 @@ const Articles: React.FC<ArticlesProps> = ({ keyword, onlyFollowing }) => {
             author={article.User.name}
             content={article.body}
             date={new Date(article.updatedAt)}
+            href={`/articles/${article.id}`}
           />
         </div>
       ))}

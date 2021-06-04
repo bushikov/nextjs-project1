@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient, Prisma, User } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import { getSession } from "next-auth/client";
 import { parseQuery } from "../../../utils/query_parser";
-
-const prisma = new PrismaClient();
 
 const baseParams: Prisma.UserFindManyArgs = {
   select: {
@@ -59,6 +57,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const authors = await getAuthors(page, keywords, user);
+
     res.status(200).json(authors);
   }
 };
