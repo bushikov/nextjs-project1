@@ -48,7 +48,7 @@ model User {
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
 
-  Article       Article[]
+  Articles      Article[]
   Followers     User[]    @relation("FollowRelationship", references: [id])
   Following     User[]    @relation("FollowRelationship", references: [id])
 
