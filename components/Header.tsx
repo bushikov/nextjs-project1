@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/client";
 
 export interface HeaderProps {}
@@ -10,7 +11,11 @@ export const Header: React.FC<HeaderProps> = () => {
   return (
     <div className="navbar">
       <div className="navbar-brand">
-        <p className="navbar-item">サービス名</p>
+        <div className="navbar-item">
+          <Link href="/">
+            <a>サービス名</a>
+          </Link>
+        </div>
         <a
           className={`navbar-burger${burgerOn ? " is-active" : ""}`}
           onClick={() => setBurgerOn(!burgerOn)}
