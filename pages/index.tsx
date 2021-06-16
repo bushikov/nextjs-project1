@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { useSession } from "next-auth/client";
@@ -8,6 +8,7 @@ import { SearchBox } from "../components/SearchBox";
 import { ArticleCard } from "../components/ArticleCard";
 import { AuthorCard } from "../components/AuthorCard";
 import { CheckBox } from "../components/CheckBox";
+import { TabIndexContext } from "../contexts/tab_index";
 
 const fetchData = async ({ queryKey }) => {
   const [url, { page, keyword, onlyFollowing }] = queryKey;
@@ -77,7 +78,7 @@ const Authors: React.FC<AuthorsProps> = ({ keyword, onlyFollowing }) => {
     <>
       {authors.map((author) => (
         <div className="column" key={author.name}>
-          <AuthorCard name={author.name} />
+          <AuthorCard name={author.name} id={author.id} />
         </div>
       ))}
     </>
@@ -86,7 +87,7 @@ const Authors: React.FC<AuthorsProps> = ({ keyword, onlyFollowing }) => {
 
 export default function Home() {
   const [session] = useSession();
-  const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useContext(TabIndexContext);
   // TODO: Pagination
   // const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState("");
@@ -97,6 +98,7 @@ export default function Home() {
       <div className="container">
         <Header />
         <Tab
+          defaultValue={tabIndex}
           labels={["記事", "作者"]}
           onChange={(index) => {
             setTabIndex(index);
