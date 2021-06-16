@@ -43,7 +43,7 @@ export default function Article({ article }) {
   return (
     <div className="container">
       <Header />
-      <div className="block">
+      <section className="section">
         <div className="tile is-ancestor">
           <div className="tile is-parent is-4">
             <div className="tile is-child box">{`Author: ${article.User.name}`}</div>
@@ -58,7 +58,7 @@ export default function Article({ article }) {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
