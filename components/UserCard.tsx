@@ -1,11 +1,11 @@
 import Link from "next/link";
 
-export interface AuthorCardProps {
+export interface UserCardProps {
   name: string;
   id: number;
 }
 
-export const AuthorCard: React.FC<AuthorCardProps> = ({ name, id }) => (
+export const UserCard: React.FC<UserCardProps> = ({ name, id }) => (
   <Link href={`/users/${id}`}>
     <a>
       <div className="card">

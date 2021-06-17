@@ -13,7 +13,7 @@ export const Header: React.FC<HeaderProps> = () => {
       <div className="navbar-brand">
         <div className="navbar-item">
           <Link href="/">
-            <a>サービス名</a>
+            <a>Article Service</a>
           </Link>
         </div>
         <a

@@ -6,7 +6,7 @@ import { Header } from "../components/Header";
 import { Tab } from "../components/Tab";
 import { SearchBox } from "../components/SearchBox";
 import { ArticleCard } from "../components/ArticleCard";
-import { AuthorCard } from "../components/AuthorCard";
+import { UserCard } from "../components/UserCard";
 import { CheckBox } from "../components/CheckBox";
 import { TabIndexContext } from "../contexts/tab_index";
 
@@ -55,14 +55,14 @@ const Articles: React.FC<ArticlesProps> = ({ keyword, onlyFollowing }) => {
   );
 };
 
-interface AuthorsProps {
+interface UsersProps {
   keyword?: string;
   onlyFollowing?: boolean;
 }
 
-const Authors: React.FC<AuthorsProps> = ({ keyword, onlyFollowing }) => {
-  const { data: authors, isFetching } = useQuery(
-    ["/api/authors", { keyword, onlyFollowing }],
+const Users: React.FC<UsersProps> = ({ keyword, onlyFollowing }) => {
+  const { data: users, isFetching } = useQuery(
+    ["/api/users", { keyword, onlyFollowing }],
     fetchData
   );
 
@@ -76,9 +76,9 @@ const Authors: React.FC<AuthorsProps> = ({ keyword, onlyFollowing }) => {
 
   return (
     <>
-      {authors.map((author) => (
-        <div className="column" key={author.name}>
-          <AuthorCard name={author.name} id={author.id} />
+      {users.map((user) => (
+        <div className="column" key={user.name}>
+          <UserCard name={user.name} id={user.id} />
         </div>
       ))}
     </>
@@ -99,7 +99,7 @@ export default function Home() {
         <Header />
         <Tab
           defaultValue={tabIndex}
-          labels={["記事", "作者"]}
+          labels={["Articles", "Users"]}
           onChange={(index) => {
             setTabIndex(index);
           }}
@@ -124,7 +124,7 @@ export default function Home() {
           {tabIndex === 0 ? (
             <Articles keyword={keyword} onlyFollowing={onlyFollowing} />
           ) : (
-            <Authors keyword={keyword} onlyFollowing={onlyFollowing} />
+            <Users keyword={keyword} onlyFollowing={onlyFollowing} />
           )}
         </div>
       </div>

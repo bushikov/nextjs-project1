@@ -13,7 +13,7 @@ const baseParams: Prisma.UserFindManyArgs = {
   },
 };
 
-const getAuthors = async (page?: number, keywords?: string[], user?: User) => {
+const getUsers = async (page?: number, keywords?: string[], user?: User) => {
   let params = { ...baseParams };
 
   if (page) {
@@ -56,8 +56,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       user = session.user;
     }
 
-    const authors = await getAuthors(page, keywords, user);
+    const users = await getUsers(page, keywords, user);
 
-    res.status(200).json(authors);
+    res.status(200).json(users);
   }
 };
