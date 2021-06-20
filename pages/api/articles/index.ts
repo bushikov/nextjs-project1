@@ -64,6 +64,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     let users;
     if (session && onlyFollowing) {
       const { email } = session.user;
+
       users = await prisma.user
         .findUnique({
           where: { email },

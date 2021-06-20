@@ -16,10 +16,10 @@ if (process.env.NODE_ENV === "production") {
 
 const options = {
   providers: [
-    Providers.GitHub({
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    }),
+    // Providers.GitHub({
+    //   clientId: process.env.GITHUB_CLIENT_ID,
+    //   clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    // }),
     Providers.Credentials({
       name: "Credential (as Test User)",
       credentials: {},
