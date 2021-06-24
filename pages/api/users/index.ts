@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Prisma, User } from "@prisma/client";
 import { getSession } from "next-auth/client";
-import { parseQuery } from "../../../utils/query_parser";
+import { parseUsersQuery } from "../../../utils/query_parser";
 
 const baseParams: Prisma.UserFindManyArgs = {
   select: {
@@ -49,7 +49,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const method = req.method;
 
   if (method === "GET") {
-    const { page, keywords, onlyFollowing } = parseQuery(req.query);
+    const { page, keywords, onlyFollowing } = parseUsersQuery(req.query);
 
     let user;
     if (session && onlyFollowing) {

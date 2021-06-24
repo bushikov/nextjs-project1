@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Prisma, User } from "@prisma/client";
 import { getSession } from "next-auth/client";
-import { parseQuery } from "../../../utils/query_parser";
+import { parseArticlesQuery } from "../../../utils/query_parser";
 
 const baseParams: Prisma.ArticleFindManyArgs = {
   select: {
@@ -44,7 +44,7 @@ const getArticles = async (
     }
   }
 
-  if (users) {
+  if (users && users.length) {
     params = {
       ...params,
       where: { ...params.where, userId: { in: users.map((u) => u.id) } },
@@ -59,18 +59,29 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const method = req.method;
 
   if (method === "GET") {
-    const { page, keywords, onlyFollowing } = parseQuery(req.query);
+    const { page, keywords, isFollowing, isMine } = parseArticlesQuery({
+      page: req.query.page,
+      keyword: req.query.keyword,
+      conditions: req.query["conditions[]"],
+    });
 
-    let users;
-    if (session && onlyFollowing) {
+    let users = [];
+    if (session) {
       const { email } = session.user;
+      if (isFollowing) {
+        users.push(
+          ...(await prisma.user
+            .findUnique({
+              where: { email },
+              select: { Following: true },
+            })
+            .Following())
+        );
+      }
 
-      users = await prisma.user
-        .findUnique({
-          where: { email },
-          select: { Following: true },
-        })
-        .Following();
+      if (isMine) {
+        users.push(await prisma.user.findUnique({ where: { email } }));
+      }
     }
 
     const articles = await getArticles(page, keywords, users);

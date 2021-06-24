@@ -17,6 +17,18 @@ const fetchData = async ({ queryKey }) => {
   return response.data;
 };
 
+const fetchArticleData = async ({ queryKey }) => {
+  const [url, { page, keyword, onlyFollowing }] = queryKey;
+  const conditions = onlyFollowing ? ["following"] : [];
+  const params = {
+    page,
+    keyword,
+    conditions,
+  };
+  const response = await axios.get(url, { params });
+  return response.data;
+};
+
 interface ArticlesProps {
   keyword?: string;
   onlyFollowing?: boolean;
@@ -27,7 +39,7 @@ const Articles: React.FC<ArticlesProps> = ({ keyword, onlyFollowing }) => {
     // TODO: Pagination
     // ["/api/articles", { page, keyword }],
     ["/api/articles", { keyword, onlyFollowing }],
-    fetchData
+    fetchArticleData
   );
 
   if (isFetching) {
