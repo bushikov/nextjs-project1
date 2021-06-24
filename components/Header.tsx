@@ -31,6 +31,13 @@ export const Header: React.FC<HeaderProps> = () => {
         style={burgerOn ? {} : { display: "none" }}
       >
         <div className="navbar-end" style={burgerOn ? {} : {}}>
+          {session ? (
+            <div className="navbar-item">
+              <Link href="/users/me">
+                <a>My page</a>
+              </Link>
+            </div>
+          ) : null}
           <div className="navbar-item">
             {session ? (
               <button
@@ -52,6 +59,13 @@ export const Header: React.FC<HeaderProps> = () => {
       {/* END Burger menu contents */}
       <div className="navbar-menu">
         <div className="navbar-end">
+          {session ? (
+            <div className="navbar-item">
+              <Link href="/users/me">
+                <a>My page</a>
+              </Link>
+            </div>
+          ) : null}
           <div className="navbar-item">
             {session ? (
               <button className="button is-primary" onClick={() => signOut()}>
