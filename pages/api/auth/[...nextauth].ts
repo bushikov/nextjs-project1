@@ -35,7 +35,7 @@ const options = {
   adapter: Adapters.Prisma.Adapter({ prisma }),
   session: {
     jwt: true,
-    maxAge: 5 * 60,
+    maxAge: 30 * 60,
   },
 };
 
