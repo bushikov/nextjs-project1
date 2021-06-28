@@ -86,5 +86,25 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const articles = await getArticles(page, keywords, users);
     res.status(200).json(articles);
+  } else if (method === "POST") {
+    if (!session) {
+      res.status(403).json({});
+      return;
+    }
+
+    const { email } = session.user;
+    const { title, content } = req.body;
+
+    await prisma.article.create({
+      data: {
+        title,
+        body: content,
+        User: {
+          connect: { email },
+        },
+      },
+    });
+
+    res.status(201).json({});
   }
 };

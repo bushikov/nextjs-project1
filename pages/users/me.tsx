@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/client";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import axios from "axios";
 import { Header } from "../../components/Header";
 import { ArticleCard } from "../../components/ArticleCard";
+import { ArticleForm } from "../../components/ArticleForm";
 
 const fetchMyArticles = async ({ queryKey }) => {
   const [url, { onlyMine }] = queryKey;
@@ -13,20 +14,19 @@ const fetchMyArticles = async ({ queryKey }) => {
   return response.data;
 };
 
-const Articles: React.FC<{}> = () => {
-  const { data: articles, isFetching } = useQuery(
-    ["/api/articles", { onlyMine: true }],
-    fetchMyArticles
-  );
+type ArticlesProps = {
+  articles: {
+    id: number;
+    title: string;
+    User: {
+      name;
+    };
+    body: string;
+    updatedAt: string;
+  }[];
+};
 
-  if (isFetching) {
-    return (
-      <div className="columns">
-        <p className="column">Loading...</p>
-      </div>
-    );
-  }
-
+const Articles: React.FC<ArticlesProps> = ({ articles }) => {
   return (
     <>
       {articles.map((article) => (
@@ -47,7 +47,23 @@ const Articles: React.FC<{}> = () => {
 export default function Me() {
   const [session, loading] = useSession();
   const router = useRouter();
+  const {
+    isFetching,
+    data: articles,
+    refetch,
+  } = useQuery(["/api/articles", { onlyMine: true }], fetchMyArticles);
+  const { mutate, isLoading } = useMutation(
+    async (article) => {
+      await axios.post("/api/articles", article);
+    },
+    {
+      onSuccess: async () => {
+        await refetch();
+      },
+    }
+  );
 
+  // 未ログイン時はルートに移動
   useEffect(() => {
     if (!loading && !session) {
       router.push("/");
@@ -65,9 +81,17 @@ export default function Me() {
         <div className="level box">
           <p className="title">{session?.user?.name}</p>
         </div>
-        <div></div>
         <div className="box">
-          <Articles />
+          {isLoading ? <p>Adding...</p> : <ArticleForm onSubmit={mutate} />}
+        </div>
+        <div className="box">
+          {isFetching ? (
+            <div className="columns">
+              <p className="column">Loading...</p>
+            </div>
+          ) : (
+            <Articles articles={articles} />
+          )}
         </div>
       </section>
     </div>

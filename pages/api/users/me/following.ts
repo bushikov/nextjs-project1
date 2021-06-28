@@ -46,8 +46,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } else {
     res.status(400).send("BAD REQUEST");
   }
-
-  // res
-  //   .status(200)
-  //   .json({ headers: req.headers, query: req.query, body: req.body });
 };
