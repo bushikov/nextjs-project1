@@ -28,3 +28,18 @@ Nextjsお試しプロジェクト
   - ユーザー一覧をフォロー中ユーザーで絞り込み
   - ユーザーをフォローする／フォローを外す
   - 記事を書く
+
+## 使い方
+```
+# ライブラリのインストール
+npm install
+
+# DBマイグレート
+npx prisma migrate dev --preview-feature
+
+# シード作成
+npx prisma db seed --preview-feature
+
+# 起動
+npm run dev
+```
